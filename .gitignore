@@ -1,5 +1,6 @@
 node_modules/
-client/dist/
+frontend/dist/
+.vercel/
 .env
 .env.*
 !.env.example

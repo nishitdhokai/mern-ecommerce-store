@@ -12,6 +12,17 @@ const products = [
   { title: 'Soft Form Catchall', description: 'A sculptural catchall tray for the little things that deserve a home. Cast in a warm, matte ceramic.', price: 26, image: 'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=900&q=85', category: 'Home', badge: '', rating: 4.7, stock: 12 },
   { title: 'Field Notes Set', description: 'Three pocket-sized notebooks with a sturdy recycled cover for thoughts on the go.', price: 18, image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=85', category: 'Stationery', badge: '', rating: 4.8, stock: 40 },
 ];
-try { await mongoose.connect(process.env.MONGO_URI); await Product.deleteMany({}); await Product.insertMany(products); console.log(`Seeded ${products.length} products.`); }
+try {
+  await mongoose.connect(process.env.MONGO_URI);
+  const operations = products.map((product) => ({
+    updateOne: {
+      filter: { title: product.title },
+      update: { $set: product },
+      upsert: true,
+    },
+  }));
+  await Product.bulkWrite(operations);
+  console.log(`Synced ${products.length} sample products.`);
+}
 catch (error) { console.error(error); process.exitCode = 1; }
 finally { await mongoose.disconnect(); }
