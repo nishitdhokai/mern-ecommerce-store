@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { requireAuth } from '../middleware/auth.js';
+import Product from '../models/Product.js';
+import User from '../models/User.js';
+const router = Router();
+router.use(requireAuth);
+router.get('/', async (req, res, next) => { try { const user = await User.findById(req.user.id).select('wishlist').populate('wishlist'); res.json({ products: user.wishlist.filter(Boolean) }); } catch (err) { next(err); } });
+router.post('/:productId', async (req, res, next) => { try { const product = await Product.findById(req.params.productId); if (!product) return res.status(404).json({ message: 'Product not found.' }); const user = await User.findByIdAndUpdate(req.user.id, { $addToSet: { wishlist: product.id } }, { new: true }).select('wishlist'); res.json({ wishlist: user.wishlist }); } catch (err) { next(err); } });
+router.delete('/:productId', async (req, res, next) => { try { const user = await User.findByIdAndUpdate(req.user.id, { $pull: { wishlist: req.params.productId } }, { new: true }).select('wishlist'); res.json({ wishlist: user.wishlist }); } catch (err) { next(err); } });
+export default router;

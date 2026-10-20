@@ -1,0 +1,5 @@
+import { ArrowLeft, ArrowUpRight, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
+import ProductCard from './ProductCard';
+export default function Wishlist({ notify }) { const { wishlist } = useStore(); return <main className="simple-page wishlist-page"><Link className="back-link" to="/"><ArrowLeft size={15}/> Back to the collection</Link><div className="cart-heading"><div><p className="eyebrow">THE THINGS THAT STAY WITH YOU</p><h1>Your <em>favorites.</em></h1></div><span>{wishlist.length} saved</span></div>{wishlist.length ? <div className="product-grid">{wishlist.map((product) => <ProductCard key={product._id} product={product} onQuickAdd={(item) => notify(`Added ${item.title} to your bag`)}/>)}</div> : <div className="empty-cart"><div className="empty-icon"><Heart/></div><h2>A few things to <em>love.</em></h2><p>Tap the little heart on anything that catches your eye, and we’ll keep it safe here.</p><Link to="/" className="text-link">Browse the collection <ArrowUpRight size={15}/></Link></div>}</main>; }
