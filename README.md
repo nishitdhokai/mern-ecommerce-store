@@ -22,7 +22,7 @@ mern-store/
 4. From this folder run `npm install`, `npm install --prefix backend`, `npm install --prefix frontend`, then `npm run dev`.
 5. Seed sample products with `npm run seed --prefix backend`. Open http://localhost:5173.
 
-Signup, login, product listing/details, wishlist, cart, and demo checkout work end to end. API health check: `/api/health`.
+Signup, customer login, admin login, product listing/details, wishlist, cart, and demo checkout are included. The admin dashboard can add and remove catalog products. API health check: `/api/health`.
 
 ## Environment variables
 
@@ -35,6 +35,11 @@ Signup, login, product listing/details, wishlist, cart, and demo checkout work e
 | `JWT_SECRET` | Random secret, at least 32 characters |
 | `CLIENT_URL` | Exact deployed Vercel origin, e.g. `https://your-shop.vercel.app` |
 | `NODE_ENV` | Set `production` on Render |
+| `ADMIN_EMAIL` | Email for the private administrator account |
+| `ADMIN_PASSWORD` | Unique admin password (at least 12 characters); never commit or share it |
+| `ADMIN_NAME` | Optional administrator display name |
+
+When both `ADMIN_EMAIL` and `ADMIN_PASSWORD` are set, the backend provisions that account with the `admin` role during startup. Admin sign-in is at `/admin/login`; the protected product dashboard is at `/admin`. Public signup cannot create admin accounts.
 
 ### Frontend (`frontend/.env`)
 
@@ -60,7 +65,7 @@ Confirm `.env` files are not staged. `.gitignore` excludes them.
 1. Create a **Web Service** from the GitHub repository.
 2. Set **Root Directory** to `mern-store/backend` (or `backend` if this folder is the repository root).
 3. Build command: `npm install`; Start command: `npm start`.
-4. Add `MONGO_URI`, `JWT_SECRET`, `CLIENT_URL` (the Vercel origin), and `NODE_ENV=production`. Render supplies `PORT`.
+4. Add `MONGO_URI`, `JWT_SECRET`, `CLIENT_URL` (the Vercel origin), `ADMIN_EMAIL`, `ADMIN_PASSWORD` (at least 12 characters), and `NODE_ENV=production`. Render supplies `PORT`.
 5. Deploy and verify `https://YOUR-SERVICE.onrender.com/api/health` returns `{ "status": "ok" }`.
 
 Free Render services may sleep when idle; their first request can take a little longer.
