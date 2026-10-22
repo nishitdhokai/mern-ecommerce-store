@@ -25,7 +25,19 @@ app.use('/api/checkout', checkoutRoutes);
 app.get('/', (_req, res) => res.json({
   name: 'Northstar Market API',
   status: 'ok',
-  endpoints: ['/api/health', '/api/products'],
+  endpoints: ['/api/health', '/api/products', '/api/auth/signup', '/api/auth/login', '/api/auth/admin/login', '/api/checkout'],
+}));
+app.get('/api', (_req, res) => res.json({
+  name: 'Northstar Market API',
+  status: 'ok',
+  routes: {
+    health: 'GET /api/health',
+    products: 'GET /api/products',
+    signup: 'POST /api/auth/signup',
+    customerLogin: 'POST /api/auth/login',
+    adminLogin: 'POST /api/auth/admin/login',
+    checkout: 'POST /api/checkout (requires customer token)',
+  },
 }));
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 app.use((req, res) => res.status(404).json({ message: `Route not found: ${req.method} ${req.path}` }));

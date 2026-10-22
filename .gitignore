@@ -4,5 +4,6 @@ frontend/dist/
 .env
 .env.*
 !.env.example
+!frontend/.env.production
 *.log
 .DS_Store
