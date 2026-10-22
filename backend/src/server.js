@@ -22,6 +22,11 @@ app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 30, standardHe
 app.use('/api/products', productRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/checkout', checkoutRoutes);
+app.get('/', (_req, res) => res.json({
+  name: 'Northstar Market API',
+  status: 'ok',
+  endpoints: ['/api/health', '/api/products'],
+}));
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 app.use((req, res) => res.status(404).json({ message: `Route not found: ${req.method} ${req.path}` }));
 app.use((err, _req, res, _next) => { console.error(err); res.status(err.status || 500).json({ message: err.status ? err.message : 'Something went wrong. Please try again.' }); });
